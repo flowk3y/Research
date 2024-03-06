@@ -18,7 +18,6 @@ useExpressRoute(app);
 // Log request to console
 app.use(morgan("dev"));
 
-
 // Gzip respone
 app.use(compression());
 
