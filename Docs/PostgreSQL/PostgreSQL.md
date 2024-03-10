@@ -1,29 +1,56 @@
 # PostgreSQL
 
 ## What is PostgreSQL ?
-PostgreSQL is Object - Relational Management System (ORDBMS) based on POSTGRES, Version 4.2, developed at the University of California at Berkeley Computer Science Department.
-### Postgres
-Traditional relational database management systems (DBMSs) support a data model consisting of a collection of named relations, containing attributes of a specific type. In current commercial systems, possible types include floating point numbers, integers, character strings, money, and dates.
-PostgreSQL is an open-source descendant of this original Berkeley code. It supports a large part of the SQL standard and offers many modern features.
+PostgreSQL is Object - Relational Management System (ORDBMS) based on POSTGRES, Version 4.2, developed at the University of California at Berkeley Computer Science Department. PostgreSQL is designed to run on UNIX-like platforms. However, PostgreSQL was later dynamically adapted to run on many different platforms such as Mac OS X, Solaris and Windows. PostgreSQL is a free open source.
 
-### How to install PostgreSQL?
+## How to install PostgreSQL?
 Click this link https://www.postgresql.org/download
 
-### Architectural
-#### PostgreSQL uses a client/server model
+## Architectural
+### PostgreSQL uses a client/server model
 - **A server** responsible for manages database files, listening connection from client application to tranfer data and performs database actions. The database server program is called **postgres**.
 - **The user's client** (frontend) application that wants to perform database operations by using cli, a graphical application, a web server access database to load web pages.
 
-#### Logic PostgreSQL
-- Database Cluster a list of database in a server
-- Database
-- Schema
-- Object -> (Table, Index, Trigger)
+### Architectural Logic PostgreSQL
+- Database Cluster: list of database in a server
+- Database: database
+- Schema: A datatabase schema is the "blueprint" or "constructor" of a database which describes how the data may relate to other tables or other data models
+- Objects -> (Tables, Indexs, Triggers)
 - Database objects managed by OID
+![alt text](image-2.png)
 
-#### Physical PostgreSQL
-- Database Cluster has a path call Base directory to store important files and folders. Each tables and indexs have their specific OID.
+![alt text](image-3.png)
 
+### Architectural Physical PostgreSQL
+- Database Cluster has a path call Base directory to store important files and folders. 
+- In PostgreSQL/../data path will contain many important files, sub
+- Each tables and indexs have their specific OID.
+![alt text](image-4.png)
+
+### Important files
+**Connection config files**: Config which IPs, protocols, methods, user/passwd, no passwd
+- pg_hba.conf: host-based authentication - used to config which hosts can connect with your database
+- pg_ident.conf: mapping files - In case, the external application connects instead using user/passwd
+
+**Information files**: Files contain information of our sql application, databases,...
+- PG_VERSION: Contains version of database.
+- current_logfiles: Infomation of files log.
+- Postmaster infomation: all infomation of postmaster saved on postmaster.opts, postmaster.pid 
+
+**Database configuration files**: Store all arguments to configure database.
+- postgresql.conf: Store many data about db system: resource usage, locations, connections and authentications, logs,...
+- postgresql.auto.conf: Infomation of configuration parameters after used `ALTER SYSTEM` saved on there. Value of this file will append data on postgresql.conf. 
+
+### Important folders
+- base: store object database
+- global: global object database
+- log: logging activities of interactive with PostgresSQL DB.
+- pg_wal: logging the change on database.
+
+### Tablespace
+- Tablespaces in PostgreSQL allow database administrators to define locations in the file system where the files representing database objects can be stored. Once created, a tablespace can be referred to by name when creating database objects.
+
+- By using tablespaces, an administrator can control the disk layout of a PostgreSQL installation. This is useful in at least two ways. First, if the partition or volume on which the cluster was initialized runs out of space and cannot be extended, a tablespace can be created on a different partition and used until the system can be reconfigured.
 
 ### Creating a Database
 To create a new database, in this example named mydb, you use the following command:
@@ -108,6 +135,11 @@ SELECT w1.city, w1.temp_lo AS low, w1.temp_hi AS high,
         ON w1.temp_lo < w2.temp_lo AND w1.temp_hi > w2.temp_hi;
 ```
 
+### Indexing
+Index is a data structure reduces query time of SQL commands (SELECT, WHERE, ORDER, GROUP). But the disadvantage of index is slow down time input data to objects because processing of index must add records to indexing table.
+```postgresql
+CREATE INDEX weather_index ON weather (cities);
+```
 ### Aggregate Functions
 count, sum, avg (average), max (maximum) and min (minimum),...
 ```postgresql
@@ -138,29 +170,5 @@ UPDATE weather
 ### Delete
 ```postgresql
 DELETE FROM weather WHERE city = 'Hayward';
-```
-
-### Advance Functions
-
-#### Window Functions
-A window function performs a calculation across a set of table rows that are somehow related to the current row. This is comparable to the type of calculation that can be done with an aggregate function. However, window functions do not cause rows to become grouped into a single output row like non-window aggregate calls would. Instead, the rows retain their separate identities. Behind the scenes, the window function is able to access more than just the current row of the query result.
-
-```postgresql
-SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;
-```
-
-```
- depname  | empno | salary |          avg
------------+-------+--------+-----------------------
- develop   |    11 |   5200 | 5020.0000000000000000
- develop   |     7 |   4200 | 5020.0000000000000000
- develop   |     9 |   4500 | 5020.0000000000000000
- develop   |     8 |   6000 | 5020.0000000000000000
- develop   |    10 |   5200 | 5020.0000000000000000
- personnel |     5 |   3500 | 3700.0000000000000000
- personnel |     2 |   3900 | 3700.0000000000000000
- sales     |     3 |   4800 | 4866.6666666666666667
- sales     |     1 |   5000 | 4866.6666666666666667
- sales     |     4 |   4800 | 4866.6666666666666667
 ```
 
