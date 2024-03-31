@@ -51,7 +51,7 @@ For example: ENTRYPOINT ["npm", "start"]
 
 When using both CMD and ENTRYPOINT in the same Dockerfile, the parameters passed when launching the container will be treated as arguments to the ENTRYPOINT command, while CMD will provide default arguments if no arguments are passed.
 
-# So what if we use Entrypoint with docker-compose command???
+# So what if we use Entrypoint Dockerfile with docker-compose command???
 docker-compose.yml
 ```yml
 version: '3.8'
@@ -69,7 +69,7 @@ ENTRYPOINT [ "echo" ]
 ```
 Result is ![alt text](image-1.png)
 
-# So what if we use CMD with docker-compose command???
+# So what if we use CMD Dockerfile with docker-compose command???
 docker-compose.yml
 ```yml
 version: '3.8'
@@ -85,6 +85,8 @@ FROM ubuntu
 
 CMD echo "Run Dockerfile"
 ```
+
+# So what if we use CMD Dockerfile with docker-compose Entrypoint
 Result is ![alt text](image-2.png)
 
 REFERENCE: 
