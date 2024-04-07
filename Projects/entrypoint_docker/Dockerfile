@@ -1,3 +1,3 @@
 FROM ubuntu
 
-CMD ["Run Dockerfile"]
+CMD ["echo", "'Xin chao'", "&& echo 'hello'"]
