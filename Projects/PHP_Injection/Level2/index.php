@@ -1,4 +1,6 @@
-
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,12 +22,8 @@
           <div class="card-body">
             <form method="POST" action="index.php">
               <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Enter UserId: </label>
                 <input type="text" class="form-control" id="username" name="username" required>
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
               </div>
               <div class="text-center">
                 <button type="submit" class="btn btn-primary">Login</button>
@@ -44,26 +42,27 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "password";
+$password = "";
 $dbname = "test_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die("Connection failed " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $sql = "SELECT username FROM users WHERE id = $id";
+    $result = $conn->query($sql);
 
-$sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    echo "Login successfully!";
-} else {
-    echo "Username or password wrong!";
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            echo "ID: ".$row["id"]. " -> " . $row["username"];
+        }
+    } else {
+        echo "No results";
+    }
 }
-
 $conn->close();
 ?>
