@@ -6,7 +6,7 @@ if (isset($_POST['username']) && !empty($_POST['username'])) {
 
     $sql = "SELECT * FROM users WHERE username='$username'";
 
-//    try {
+    try {
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -14,7 +14,7 @@ if (isset($_POST['username']) && !empty($_POST['username'])) {
         } else {
             echo "No user were found.";
         }
-//    } catch (Exception $e) {}
+    } catch (Exception $e) {}
 
 }
 ?>
